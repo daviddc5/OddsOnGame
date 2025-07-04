@@ -1,83 +1,51 @@
 import React, { useState } from "react";
+import SinglePlayerApp from "./SinglePlayerApp";
+import MultiplayerApp from "./MultiplayerApp";
 import LuigiImg from "./assets/Luigi.jpg";
 
-export default function App() {
-  const [player1, setPlayer1] = useState("");
-  const [player2, setPlayer2] = useState("");
-  const [dare, setDare] = useState("");
-  const [result, setResult] = useState("");
+const App: React.FC = () => {
+  const [gameMode, setGameMode] = useState<"menu" | "single" | "multiplayer">(
+    "menu"
+  );
 
-  const handleReveal = () => {
-    const num1 = parseInt(player1, 10);
-    const num2 = parseInt(player2, 10);
+  if (gameMode === "single") {
+    return <SinglePlayerApp />;
+  }
 
-    if (isNaN(num1) || isNaN(num2)) {
-      setResult("Please enter valid numbers for both players");
-      return;
-    }
-
-    if (num1 === num2) {
-      setResult(`Match! Dare time: ${dare || "No dare set!"}`);
-    } else {
-      setResult("No match! Try again.");
-    }
-  };
+  if (gameMode === "multiplayer") {
+    return <MultiplayerApp />;
+  }
 
   return (
     <div
-      className="w-screen h-screen bg-cover bg-center bg-no-repeat"
+      className="w-screen h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
       style={{ backgroundImage: `url(${LuigiImg})` }}
     >
-      <div className="flex items-center justify-center h-full">
-        <div className="grid grid-cols-2 gap-4 bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl max-w-md w-full">
-          <div className="col-span-2 text-center text-2xl font-semibold">
-            Odds On
-          </div>
+      <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
+        <h1 className="text-4xl font-semibold mb-8">Odds On Game</h1>
 
-          <label className="flex flex-col">
-            Player 1 Number:
-            <input
-              type="number"
-              value={player1}
-              onChange={(e) => setPlayer1(e.target.value)}
-              className="mt-1 p-2 rounded bg-gray-100"
-            />
-          </label>
-
-          <label className="flex flex-col">
-            Player 2 Number:
-            <input
-              type="number"
-              value={player2}
-              onChange={(e) => setPlayer2(e.target.value)}
-              className="mt-1 p-2 rounded bg-gray-100"
-            />
-          </label>
-
-          <label className="col-span-2 flex flex-col">
-            Dare:
-            <input
-              type="text"
-              value={dare}
-              onChange={(e) => setDare(e.target.value)}
-              className="mt-1 p-2 rounded bg-gray-100"
-            />
-          </label>
-
+        <div className="space-y-4">
           <button
-            onClick={handleReveal}
-            className="col-span-2 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+            onClick={() => setGameMode("single")}
+            className="w-full bg-green-500 text-white py-4 rounded font-semibold hover:bg-green-600 transition text-lg"
           >
-            Reveal
+            🎮 Single Player
           </button>
 
-          {result && (
-            <div className="col-span-2 text-center text-lg font-medium mt-2">
-              {result}
-            </div>
-          )}
+          <button
+            onClick={() => setGameMode("multiplayer")}
+            className="w-full bg-blue-500 text-white py-4 rounded font-semibold hover:bg-blue-600 transition text-lg"
+          >
+            🌐 Multiplayer
+          </button>
         </div>
+
+        <p className="text-gray-600 mt-6 text-sm">
+          Choose your game mode to start playing!
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default App;
